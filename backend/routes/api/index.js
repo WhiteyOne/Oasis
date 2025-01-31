@@ -1,11 +1,18 @@
+
+// GET /api/restore-user
+
+//express imports
 const router = require('express').Router();
+//sequelize imports
+const { User } = require('../../db/models');
+
+//middleware imports
+const { restoreUser, setTokenCookie, requireAuth} = require('../../utils/auth.js');
+
+
+//Middleware
+router.use(restoreUser);
 
 
 
-router.post('/test', function(req, res) {
-    res.json({ requestBody: req.body });
-  });
-
-
-  
 module.exports = router;
