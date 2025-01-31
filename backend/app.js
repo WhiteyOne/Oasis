@@ -1,21 +1,29 @@
+//imports
 const express = require('express');
 require('express-async-errors');
+const routes = require('./routes');
+//Security imports
 const morgan = require('morgan');
 const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
+
+//utility imports
 const cookieParser = require('cookie-parser');
 const { environment } = require('./config');
+
+
 const isProduction = environment === 'production';
 
-
+//Express application
 const app = express();
 
+//middleware
 
-app.use(morgan('dev'));
+app.use(morgan('dev')); // security
+app.use(cookieParser()); // Parse cookie from headers
+app.use(express.json()); // Allows us to use json in req/res
 
-app.use(cookieParser());
-app.use(express.json());
 
 // Security Middleware
 if (!isProduction) {
@@ -41,8 +49,13 @@ app.use(
     })
 );
 
-const routes = require('./routes');
+// --------- MIDDLE WARES MUST BE USED ABOVE THIS LINE ------
 
-app.use(routes);
 
-  module.exports = app;
+// Routes!!!!
+app.use(routes); // Connects all our routes
+
+
+
+
+module.exports = app;
